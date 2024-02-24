@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<h1>Cerca Profili</h1>
+</br>
+<form method="post">
+    {% csrf_token %}
+    <input type="input" class="form-control" placeholder="Inserisci un username..." name="search">
+    <br>
+    <button type="submit" class="btn btn-dark">Cerca</button>
+</form>
+<br><br>
+{% if search %}
+<h2><strong>Hai cercato: {{ search }}</strong></h2>
+<br>
+{% endif %}
+{% if found %}
+{% for res in found %}
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        {% if res.profile.immagine_profilo %}
+            <img src="{{ res.profile.immagine_profilo.url }}" class="img-fluid rounded-start" width="256px" height="256px" alt="{{ res.profile.user.username }}"></img>
+          {% else %}
+            <img src="{% static 'img/defaultuser.png' %}" class="img-fluid rounded-start" alt="Immagine Profilo"></img>
+        {% endif %}
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{ res.profile.user.username }}</h5>
+          <p class="card-text"><a href="{% url 'profile' res.profile.user.id %}">@{{ res.profile.user.username|lower }}</a></p></br>
+          <p class="card-text"><small class="text-body-secondary">Ultimo aggiornamento: {{ res.profile.data_modificata }}</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+    </br>
+    {% endfor %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<h1>Cerca Post</h1>
+</br>
+<form method="post">
+    {% csrf_token %}
+    <input type="input" class="form-control" placeholder="Inserisci un contenuto di un post..." name="search">
+    <br>
+    <button type="submit" class="btn btn-dark">Cerca</button>
+</form>
+<br><br>
+{% if search %}
+<h2><strong>Hai cercato: {{ search }}</strong></h2>
+<br><br><br>
+{% for post in found %}
+<div class="alert alert-success" role="alert">
+    <div class="container">
+        <div class="row" style="overflow-wrap: break-word;">
+            <div class="col-1">
+                {% if post.user.profile.immagine_profilo %}
+    <img src="{{ post.user.profile.immagine_profilo.url }}" class="img-fluid rounded-circle" width="256px" height="256px" alt="{{ profile.user.username }}"></img>
+  {% else %}
+    <img src="{% static 'img/defaultuser.png' %}" class="img-fluid rounded-circle" alt="Immagine Profilo"></img>
+{% endif %}
+            </div>
+            <div class="col-10"  >
+                {{ post.body }}
+                </br>
+                <small class="text-muted">
+                    Fatto da: @{{ post.user.username|lower }}; Pubblicato il {{ post.created_at }} <strong>Mi piace: {{ post.numberoflikes }};  </strong>
+                    {% if user in post.likes.all %}
+                    <a href="{% url 'postlike' post.id %}">
+                        <i class="fa-solid fa-heart" style="color: #006e0f;"></i>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'postlike' post.id %}">
+                        <i class="fa fa-heart-o" style="color: #006e0f;"></i>
+                    </a>
+                    {% endif %}
+                </small>
+                <a href="{% url 'postshare' post.id %}"><i class="fas fa-share" style="color: #006e0f;"></i></a>
+                {% if request.user.username == post.user.username %}
+                <a href="{% url 'postdelete' post.id %}"><i class="fas fa-trash-alt" style="color: #006e0f;"></i></a>
+                <a href="{% url 'postedit' post.id %}"><i class="fa-solid fa-file-pen" style="color: #006e0f;"></i></a>
+                {% endif %}
+                </br>
+            </div>
+        </div>
+    </div> 
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

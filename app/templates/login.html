@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<h1>Sei già accesso ad un account!</h1>
+{% else %}
+<div class="col-md-6 offset-md-3">
+    <h1>Accedi</h1>
+    </br>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Username</label>
+          <input type="text" class="form-control" name="username" placeholder="Inserisci il tuo username.">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" class="form-control" name="password" placeholder="Inserisci la tua password.">
+        </div>
+        </br>
+        <button type="submit" class="btn btn-dark">Submit</button>
+      </form>
+</div>
+{% endif %}
+{% endblock %}

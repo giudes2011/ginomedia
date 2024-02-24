@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="container text-center">
+    <div class="row">
+        <div class="col-8">
+            <h1>Post Recenti:</h1>
+            </br>
+            {% for post in posts %}
+            <div class="alert alert-success" role="alert">
+                <div class="container">
+                    <div class="row" style="overflow-wrap: break-word;">
+                        <div class="col-1">
+                            {% if post.user.profile.immagine_profilo %}
+                <img src="{{ post.user.profile.immagine_profilo.url }}" class="img-fluid rounded-circle" width="256px" height="256px" alt="{{ profile.user.username }}"></img>
+              {% else %}
+                <img src="{% static 'img/defaultuser.png' %}" class="img-fluid rounded-circle" alt="Immagine Profilo"></img>
+            {% endif %}
+                        </div>
+                        <div class="col-10"  >
+                            {{ post.body }}
+                            </br>
+                            <small class="text-muted">
+                                Fatto da: @{{ post.user.username|lower }}; Pubblicato il {{ post.created_at }} <strong>Mi piace: {{ post.numberoflikes }};  </strong>
+                                {% if user in post.likes.all %}
+                                <a href="{% url 'postlike' post.id %}">
+                                    <i class="fa-solid fa-heart" style="color: #006e0f;"></i>
+                                </a>
+                                {% else %}
+                                <a href="{% url 'postlike' post.id %}">
+                                    <i class="fa fa-heart-o" style="color: #006e0f;"></i>
+                                </a>
+                                {% endif %}
+                            </small>
+                            <a href="{% url 'postshare' post.id %}"><i class="fas fa-share" style="color: #006e0f;"></i></a>
+                            {% if request.user.username == post.user.username %}
+                            <a href="{% url 'postdelete' post.id %}"><i class="fas fa-trash-alt" style="color: #006e0f;"></i></a>
+                            <a href="{% url 'postedit' post.id %}"><i class="fa-solid fa-file-pen" style="color: #006e0f;"></i></a>
+                            {% endif %}
+                            </br>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-4">
+            </br></br></br>
+            {% if form %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-secondary">Crea post</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

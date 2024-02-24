@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+	<div class="container text-center"style="width: 100vh; height: 100vh;">
+		<div class="row">
+
+
+	
+<br/>
+	
+		<div class="alert alert-success" role="alert">
+<div class="container">
+	<div class="row" style="overflow-wrap: break-word;">
+		<div class="col-1">
+		  {% if post.user.profile.immagine_profilo %}
+				<img src="{{ post.user.profile.immagine_profilo.url }}" width=50 height=50 class="rounded-circle" alt="{{ profile.user.username }}">
+
+				{% else %}
+				<img src="{% static 'img/defaultuser.png' %}" width=50 height=50 class="rounded-circle" alt="{{ profile.user.username }}">	
+				{% endif %}
+		</div>
+
+		<div class="col-11">
+		  {{ post.body }}<br/>
+		  <small class="text-muted">
+            Fatto da: @{{ post.user.username|lower }}; Pubblicato il {{ post.created_at }} <strong>Mi piace: {{ post.numberoflikes }};  </strong>
+            {% if user in post.likes.all %}
+                                <a href="{% url 'postlike' post.id %}">
+                                    <i class="fa-solid fa-heart" style="color: #006e0f;"></i>
+                                </a>
+                                {% else %}
+                                <a href="{% url 'postlike' post.id %}">
+                                    <i class="fa fa-heart-o" style="color: #006e0f;"></i>
+                                </a>
+                                {% endif %}
+		  </small>
+		</div><br/><br/>
+	
+			</div>
+		</div>
+	</div>
+	
+<button onclick="navigator.clipboard.writeText(window.location.href); alert('Copiato negli appunti')" type="button" class="btn btn-outline-dark">Copia URL negli appunti</button>
+
+{% endblock %}
